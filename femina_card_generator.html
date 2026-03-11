@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>FEMINA 2026 Card Generator</title>
+<style>
+body{
+font-family: Arial;
+text-align:center;
+background:#f4f4f4;
+}
+
+canvas{
+border:1px solid #ccc;
+margin-top:20px;
+}
+
+input{
+margin:5px;
+padding:8px;
+}
+
+button{
+padding:10px 20px;
+background:#d81b60;
+color:white;
+border:none;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Create your FEMINA 2026 Card</h2>
+
+<input type="text" id="name" placeholder="Your Name"><br>
+<input type="text" id="role" placeholder="Your Role / Function"><br>
+<input type="file" id="photo"><br>
+
+<button onclick="generate()">Generate Card</button>
+
+<br>
+
+<canvas id="canvas" width="800" height="800"></canvas>
+
+<br>
+<button onclick="download()">Download</button>
+
+<script>
+
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+
+function generate(){
+
+let name = document.getElementById("name").value;
+let role = document.getElementById("role").value;
+let file = document.getElementById("photo").files[0];
+
+let img = new Image();
+
+let reader = new FileReader();
+
+reader.onload = function(e){
+
+img.onload = function(){
+
+ctx.fillStyle = "#ffffff";
+ctx.fillRect(0,0,800,800);
+
+ctx.drawImage(img,250,120,300,300);
+
+ctx.fillStyle="#d81b60";
+ctx.font="bold 40px Arial";
+ctx.fillText("FEMINA 2026",280,80);
+
+ctx.fillStyle="#000";
+ctx.font="30px Arial";
+ctx.fillText(name,260,470);
+
+ctx.font="24px Arial";
+ctx.fillText(role,260,510);
+
+ctx.fillStyle="#d81b60";
+ctx.font="bold 36px Arial";
+ctx.fillText("I WILL BE THERE",230,600);
+
+}
+
+img.src = e.target.result;
+
+}
+
+reader.readAsDataURL(file);
+
+}
+
+function download(){
+
+let link = document.createElement('a');
+link.download = "femina_card.png";
+link.href = canvas.toDataURL();
+link.click();
+
+}
+
+</script>
+
+</body>
+</html>
