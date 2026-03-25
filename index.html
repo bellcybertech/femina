@@ -2,246 +2,484 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>FEMINA 2026 Card Generator</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEMINA 2026 – Générateur d'affiche</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family: 'Segoe UI', sans-serif;
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-body{
-  background:linear-gradient(135deg,#007853,#c40d3c);
-  color:#333;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-}
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #006644 0%, #1a1a2e 50%, #8B0020 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
 
-.container{
-  background:#fff;
-  padding:25px;
-  border-radius:20px;
-  width:95%;
-  max-width:500px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.2);
-  text-align:center;
-}
+  .app {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 1100px;
+  }
 
-h2{
-  margin-bottom:15px;
-  color:#c40d3c;
-}
+  /* ===== FORM PANEL ===== */
+  .form-panel {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px;
+    width: 320px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    flex-shrink: 0;
+  }
 
-input{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:10px;
-  border:1px solid #ddd;
-  outline:none;
-}
+  .form-panel h2 {
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: #c40d3c;
+    margin-bottom: 4px;
+    text-align: center;
+  }
 
-input:focus{
-  border-color:#c40d3c;
-}
+  .form-panel p.sub {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #777;
+    margin-bottom: 22px;
+  }
 
-button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:bold;
-  transition:0.3s;
-}
+  label.field-label {
+    display: block;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 5px;
+    margin-top: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
 
-.primary{
-  background:#c40d3c;
-  color:#fff;
-}
+  input[type="text"] {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-family: 'Montserrat', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    color: #222;
+  }
 
-.primary:hover{
-  background:#a50b32;
-}
+  input[type="text"]:focus { border-color: #c40d3c; }
 
-.secondary{
-  background:#007853;
-  color:#fff;
-}
+  .photo-drop {
+    display: block;
+    width: 100%;
+    padding: 18px 12px;
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.82rem;
+    color: #999;
+    transition: all 0.2s;
+    background: #fafafa;
+  }
 
-.secondary:hover{
-  background:#005c40;
-}
+  .photo-drop:hover { border-color: #007853; background: #f0fff8; color: #007853; }
+  .photo-drop.has-photo { border-color: #007853; background: #f0fff8; color: #007853; }
 
-.actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:10px;
-}
+  input[type="file"] { display: none; }
 
-canvas{
-  margin-top:20px;
-  width:100%;
-  border-radius:15px;
-  border:1px solid #ddd;
-}
+  .photo-thumb-wrap {
+    display: none;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .photo-thumb-wrap img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #007853;
+  }
+
+  .divider {
+    height: 1px;
+    background: #eee;
+    margin: 20px 0;
+  }
+
+  .btn-gen {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #c40d3c, #8B0020);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.92rem;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(196,13,60,0.3);
+  }
+
+  .btn-gen:hover { opacity: 0.92; transform: translateY(-1px); }
+
+  .btn-dl {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: linear-gradient(135deg, #007853, #005c40);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,120,83,0.3);
+    display: none;
+    transition: opacity 0.2s;
+  }
+
+  .btn-dl:hover { opacity: 0.9; }
+
+  .share-row {
+    display: none;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .share-btn {
+    padding: 10px 6px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.74rem;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    transition: opacity 0.2s;
+  }
+
+  .share-btn:hover { opacity: 0.85; }
+  .wa  { background: #25D366; color: #fff; }
+  .fb  { background: #1877F2; color: #fff; }
+  .tw  { background: #000; color: #fff; }
+  .tg  { background: #229ED9; color: #fff; }
+
+  /* ===== CANVAS ===== */
+  .canvas-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  canvas {
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+    width: min(440px, 92vw);
+    height: auto;
+    display: block;
+  }
+
+  .hint {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  .bg-error {
+    background: #fff3f3;
+    border: 1px solid #fcc;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.75rem;
+    color: #c40d3c;
+    margin-top: 12px;
+    display: none;
+  }
 </style>
-
 </head>
 <body>
 
-<div class="container">
+<div class="app">
 
-<h2>🎉 FEMINA 2026 Card</h2>
+  <!-- FORM -->
+  <div class="form-panel">
+    <h2>🎉 FEMINA 2026</h2>
+    <p class="sub">Génère ton affiche personnalisée</p>
 
-<input type="text" id="name" placeholder="Votre nom">
-<input type="text" id="role" placeholder="Votre fonction">
-<input type="file" id="photo">
+    <label class="field-label">Votre nom complet</label>
+    <input type="text" id="iName" maxlength="35" placeholder="Ex: Madame Dupont Marie">
 
-<button class="primary" onclick="generate()">✨ Générer ma carte</button>
-<button class="secondary" onclick="downloadCard()">⬇ Télécharger</button>
+    <label class="field-label">Votre fonction / titre</label>
+    <input type="text" id="iRole" maxlength="40" placeholder="Ex: DG de Optimum Finance">
 
-<div class="actions">
-  <button class="secondary" onclick="shareWhatsApp()">WhatsApp</button>
-  <button class="secondary" onclick="share('facebook')">Facebook</button>
-  <button class="secondary" onclick="share('twitter')">Twitter</button>
-  <button class="secondary" onclick="share('telegram')">Telegram</button>
-</div>
+    <label class="field-label">Votre photo</label>
+    <label class="photo-drop" for="iPhoto" id="photoLabel">
+      📷 Cliquer pour choisir une photo
+    </label>
+    <input type="file" id="iPhoto" accept="image/*" onchange="loadPhoto(this)">
+    <div class="photo-thumb-wrap" id="thumbWrap">
+      <img id="photoThumb" alt="Aperçu">
+      <p style="font-size:0.72rem;color:#007853;margin-top:5px;font-weight:600;">✅ Photo chargée</p>
+    </div>
 
-<canvas id="canvas" width="800" height="800"></canvas>
+    <div class="bg-error" id="bgError">
+      ⚠️ Image de fond introuvable. Assurez-vous que <b>fond_card.jpg</b> est dans le même dossier que ce fichier HTML.
+    </div>
+
+    <div class="divider"></div>
+
+    <button class="btn-gen" onclick="generate()">✨ Générer mon affiche</button>
+    <button class="btn-dl" id="btnDl" onclick="downloadCard()">⬇ Télécharger l'affiche (PNG)</button>
+    <div class="share-row" id="shareRow">
+      <button class="share-btn wa" onclick="shareWhatsApp()">📱 WhatsApp</button>
+      <button class="share-btn fb" onclick="shareFB()">📘 Facebook</button>
+      <button class="share-btn tw" onclick="shareTW()">✕ Twitter/X</button>
+      <button class="share-btn tg" onclick="shareTG()">✈️ Telegram</button>
+    </div>
+  </div>
+
+  <!-- CANVAS -->
+  <div class="canvas-wrap">
+    <canvas id="canvas" width="720" height="960"></canvas>
+    <p class="hint" id="hint">Chargement du modèle…</p>
+  </div>
 
 </div>
 
 <script>
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
-let ready = false;
-
-// 👉 TON LIEN VERCEL
 const SHARE_URL = "https://femina-iota.vercel.app/";
+const canvas = document.getElementById("canvas");
+const ctx    = canvas.getContext("2d");
+const W = 720, H = 960;
 
-function generate(){
-  ready = false;
+let userPhoto = null;
+let bgImage   = null;
+let cardReady = false;
 
-  let name = document.getElementById("name").value || "Your Name";
-  let role = document.getElementById("role").value || "Your Role";
-  let file = document.getElementById("photo").files[0];
+/* ══════════════════════════════════════════
+   POSITIONS of the white card zone.
+   These are expressed as FRACTIONS of W/H
+   so they scale if you change canvas size.
 
-  let img = new Image();
+   Measured visually on the template image:
+   - White card left  : ~8.5% of W
+   - White card right : ~78%  of W  → width ~69.5%
+   - White card top   : ~28%  of H
+   - White card bottom: ~88%  of H  → height ~60%
 
-  function drawCard(){
-    ctx.clearRect(0,0,800,800);
+   Inside that card:
+   - Photo fills top portion of card
+   - Name/role sit just ABOVE "J'y serai et toi??"
+     which occupies roughly the bottom 12% of the card
+══════════════════════════════════════════ */
+const CARD = {
+  x:  0.15,   // left edge fraction
+  y:  0.32,   // top edge fraction
+  w:  0.70,   // width fraction
+  h:  0.55,   // height fraction
+};
 
-    let gradient = ctx.createLinearGradient(0,0,800,800);
-    gradient.addColorStop(0,"#007853");
-    gradient.addColorStop(1,"#c40d3c");
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0,0,800,800);
+function px(frac, dim) { return Math.round(frac * dim); }
 
-    ctx.fillStyle="rgba(255,255,255,0.9)";
-    ctx.fillRect(50,50,700,700);
+/* ── Load background template ── */
+const bg = new Image();
+bg.onload = () => {
+  bgImage = bg;
+  document.getElementById("hint").textContent = "Remplissez le formulaire puis cliquez sur Générer";
+  drawBase();
+};
+bg.onerror = () => {
+  document.getElementById("bgError").style.display = "block";
+  document.getElementById("hint").textContent = "⚠️ Image de fond non chargée";
+  // draw fallback
+  ctx.fillStyle = "#eee";
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = "#c40d3c";
+  ctx.font = "bold 28px Montserrat, sans-serif";
+  ctx.textAlign = "center";
+  ctx.fillText("Image de fond introuvable", W/2, H/2);
+};
+bg.src = "fond_card.jpg";
 
-    ctx.fillStyle="#c40d3c";
-    ctx.font="bold 50px Arial";
-    ctx.textAlign="center";
-    ctx.fillText("FEMINA 2026",400,130);
-
-    ctx.fillStyle="#007853";
-    ctx.font="18px Arial";
-    ctx.fillText("1ère édition",400,170);
-
-    ctx.font="16px Arial";
-    ctx.fillText("FOIRE ECONOMIQUE DES MANUFACTURIERES",400,200);
-    ctx.fillText("ET INNOVATRICES AFRICAINES",400,225);
-
-    ctx.fillStyle="#000";
-    ctx.font="18px Arial";
-    ctx.fillText("📍 Garoua, Cameroun",400,260);
-    ctx.fillText("📅 Du 13 au 18 avril au Stade Omnisport de Roumndé Adjia",400,290);
-
-    if(file && img.complete){
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(400,420,120,0,Math.PI*2);
-      ctx.closePath();
-      ctx.clip();
-      ctx.drawImage(img,280,300,240,240);
-      ctx.restore();
-    }else{
-      ctx.beginPath();
-      ctx.arc(400,420,120,0,Math.PI*2);
-      ctx.stroke();
-      ctx.fillText("Photo",400,420);
-    }
-
-    ctx.fillStyle="#000";
-    ctx.font="bold 32px Arial";
-    ctx.fillText(name,400,600);
-
-    ctx.font="20px Arial";
-    ctx.fillText(role,400,640);
-
-    ctx.fillStyle="#c40d3c";
-    ctx.font="bold 28px Arial";
-    ctx.fillText("J'Y SERAI! ET TOI?",400,720);
-
-    ready = true;
-  }
-
-  if(file){
-    let reader = new FileReader();
-    reader.onload = function(e){
-      img.onload = drawCard;
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }else{
-    drawCard();
-  }
+/* ── Draw base (no user content) ── */
+function drawBase() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.drawImage(bgImage, 0, 0, W, H);
+  // Soft hint inside white zone
+  ctx.save();
+  ctx.globalAlpha = 0.4;
+  ctx.fillStyle = "#888";
+  ctx.font = `600 ${px(0.025, W)}px Montserrat, sans-serif`;
+  ctx.textAlign = "center";
+  ctx.fillText("📷 Votre photo apparaîtra ici", px(CARD.x + CARD.w/2, W), px(CARD.y + CARD.h * 0.45, H));
+  ctx.restore();
 }
 
-function downloadCard(){
-  if(!ready){
-    alert("Génère d'abord ta carte !");
-    return;
+/* ── Load user photo ── */
+function loadPhoto(input) {
+  if (!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      userPhoto = img;
+      document.getElementById("photoThumb").src = e.target.result;
+      document.getElementById("thumbWrap").style.display = "block";
+      document.getElementById("photoLabel").textContent = "📷 Cliquer pour changer la photo";
+      document.getElementById("photoLabel").classList.add("has-photo");
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+/* ── GENERATE ── */
+function generate() {
+  const name = document.getElementById("iName").value.trim();
+  const role = document.getElementById("iRole").value.trim();
+  drawCard(name, role, userPhoto);
+}
+
+/* ── DRAW CARD ── */
+function drawCard(name, role, photo) {
+  ctx.clearRect(0, 0, W, H);
+
+  // 1. Background template
+  if (bgImage) {
+    ctx.drawImage(bgImage, 0, 0, W, H);
+  } else {
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, W, H);
   }
 
-  let link = document.createElement('a');
-  link.download = "femina_card.png";
-  link.href = canvas.toDataURL();
+  // ── Card zone computed pixels ──
+  const cX = px(CARD.x, W);
+  const cY = px(CARD.y, H);
+  const cW = px(CARD.w, W);
+  const cH = px(CARD.h, H);
+
+  // ── Text zone (bottom ~14% of card, above "J'y serai") ──
+  // "J'y serai et toi??" occupies bottom ~13% of card in template
+  const textZoneH  = px(0.14, cH);   // height of our name/role band
+  const textZoneY  = cY + cH - px(0.13, cH) - textZoneH -1; // just above "j'y serai" area
+  const photoH     = textZoneY - cY - 6; // photo fills from top of card to just above text
+
+  // 2. User photo (with rounded corners)
+  if (photo) {
+    ctx.save();
+    roundRect(ctx, cX, cY, cW, photoH, 18);
+    ctx.clip();
+    // Cover-fit
+    const pa = photo.naturalWidth / photo.naturalHeight;
+    const fa = cW / photoH;
+    let sx = 0, sy = 0, sw = photo.naturalWidth, sh = photo.naturalHeight;
+    if (pa > fa) { sw = ph * fa; sx = (photo.naturalWidth - sw) / 2; }
+    else          { sh = photo.naturalWidth / fa; sy = (photo.naturalHeight - sh) / 2; }
+    // fix var name
+    const ph2 = photoH;
+    const fa2 = cW / ph2;
+    let sx2 = 0, sy2 = 0, sw2 = photo.naturalWidth, sh2 = photo.naturalHeight;
+    const pa2 = photo.naturalWidth / photo.naturalHeight;
+    if (pa2 > fa2) { sw2 = photo.naturalHeight * fa2; sx2 = (photo.naturalWidth - sw2)/4; }
+    else            { sh2 = photo.naturalWidth / fa2;  sy2 = (photo.naturalHeight - sh2)/4; }
+    ctx.drawImage(photo, sx2, sy2, sw2, sh2, cX, cY, cW, ph2);
+    ctx.restore();
+  }
+
+  // 3. Name & Role band — semi-transparent white strip
+  const bandY = textZoneY;
+  const bandH = textZoneH;
+
+  if (name || role) {
+    ctx.save();
+    ctx.fillStyle = "rgba(255,255,255,0.88)";
+    ctx.fillRect(cX, bandY, cW, bandH);
+    ctx.restore();
+  }
+
+  const centerX = cX + cW / 2;
+  const fontSize_role = Math.round(W * 0.031);
+  const fontSize_name = Math.round(W * 0.044);
+
+  if (role) {
+    ctx.save();
+    ctx.fillStyle = "#555";
+    ctx.font = `600 ${fontSize_role}px 'Montserrat', sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText(role, centerX, bandY + bandH * 0.82);
+    ctx.restore();
+  }
+
+  if (name) {
+    ctx.save();
+    ctx.fillStyle = "#3c6c11";
+    ctx.font = `bold ${fontSize_name}px 'Montserrat', sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillText(name, centerX, bandY + bandH * 0.40);
+    ctx.restore();
+  }
+
+  cardReady = true;
+  document.getElementById("btnDl").style.display = "block";
+  document.getElementById("shareRow").style.display = "grid";
+  document.getElementById("hint").textContent = "✅ Affiche générée — prête à télécharger !";
+}
+
+/* ── Rounded rect path ── */
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+/* ── Download ── */
+function downloadCard() {
+  if (!cardReady) { alert("Génère d'abord ton affiche !"); return; }
+  const link = document.createElement('a');
+  link.download = "affiche_femina2026.png";
+  link.href = canvas.toDataURL("image/png");
   link.click();
 }
 
-// ===== PARTAGE =====
-
-function shareWhatsApp(){
-  let message = "🎉 Rejoins-moi à FEMINA 2026 !\n👉 " + SHARE_URL;
-  let url = "https://wa.me/?text=" + encodeURIComponent(message);
-  window.open(url, "_blank");
+/* ── Share ── */
+function shareWhatsApp() {
+  const msg = "🎉 Je serai à FEMINA 2026 !\n📍 Garoua, Cameroun | 13–18 avril 2026\n👉 " + SHARE_URL;
+  window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
 }
-
-function share(platform){
-  let text = "Rejoins FEMINA 2026 !";
-  
-  if(platform === "facebook"){
-    window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(SHARE_URL));
-  }
-
-  if(platform === "twitter"){
-    window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent(text) + "&url=" + encodeURIComponent(SHARE_URL));
-  }
-
-  if(platform === "telegram"){
-    window.open("https://t.me/share/url?url=" + encodeURIComponent(SHARE_URL) + "&text=" + encodeURIComponent(text));
-  }
+function shareFB() {
+  window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(SHARE_URL), "_blank");
+}
+function shareTW() {
+  window.open("https://twitter.com/intent/tweet?text=" + encodeURIComponent("🎉 Je serai à #FEMINA2026 à Garoua ! 👉 " + SHARE_URL), "_blank");
+}
+function shareTG() {
+  window.open("https://t.me/share/url?url=" + encodeURIComponent(SHARE_URL) + "&text=" + encodeURIComponent("Je serai à FEMINA 2026 !"), "_blank");
 }
 </script>
-
 </body>
 </html>
